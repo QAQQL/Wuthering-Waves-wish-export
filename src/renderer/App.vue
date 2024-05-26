@@ -64,7 +64,7 @@
       </div>
     </div>
     <Setting v-show="state.showSetting" :i18n="state.i18n" @changeLang="getI18nData()" @close="showSetting(false)"
-             @dataUpdated="readData(true)"></Setting>
+             @dataUpdated="readData(true)"  @dataClean="dataClean()"></Setting>
     <el-dialog :title="ui.urlDialog.title" v-model="state.showUrlDlg" width="90%" custom-class="max-w-md">
       <p class="mb-4 text-gray-500">{{ ui.urlDialog.hint }}</p>
       <el-input type="textarea" :autosize="{minRows: 4, maxRows: 6}" :placeholder="ui.urlDialog.placeholder"
@@ -215,6 +215,11 @@ const readData = async (force = false) => {
       state.status = 'loaded'
     }
   }
+}
+
+const dataClean = () => {
+  changeCurrent(0)
+  readData(true)
 }
 
 const getI18nData = async () => {

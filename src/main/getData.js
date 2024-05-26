@@ -26,14 +26,21 @@ const saveData = async (data, url) => {
     await saveJSON(`gacha-list-${data.uid}.json`, obj)
 }
 
-const defaultTypeMap = new Map([['6', '新手自选唤取'], ['5', '新手唤取'], ['4', '武器常驻唤取'], ['3', '角色常驻唤取'], ['2', '武器活动唤取'], ['1', '角色活动唤取']])
+const defaultTypeMap = new Map([["7", "新手自选唤取(感恩定向唤取)"], ['6', '新手自选唤取'], ['5', '新手唤取'], ['4', '武器常驻唤取'], ['3', '角色常驻唤取'], ['2', '武器活动唤取'], ['1', '角色活动唤取']])
 
 let localDataReaded = false
+/**
+ * 读取本地数据
+ * @param force 是否强制读取
+ * @returns {Promise<void>}
+ */
 const readData = async (force = false) => {
     if (localDataReaded && !force) return
     localDataReaded = true
     await fs.ensureDir(userDataPath)
     const files = await readdir(userDataPath)
+
+    dataMap.clear()
     for (let name of files) {
         if (/^gacha-list-\d+\.json$/.test(name)) {
             try {
@@ -345,7 +352,7 @@ ipcMain.handle('FETCH_DATA', async (event, param) => {
 
 ipcMain.handle('CLEAN_LOCAL_DB', async (event, param) => {
     try {
-        if (!param || !param.uid) {
+        if (param) {
             //清空全部
             fs.readdirSync(userDataPath)
                 .filter(file => file.startsWith("gacha-list-") && path.extname(file) === '.json')
@@ -355,10 +362,11 @@ ipcMain.handle('CLEAN_LOCAL_DB', async (event, param) => {
             dataMap.clear()
             return "全部清空成功"
         } else {
-            if (existsFile(`gacha-list-${param.uid}.json`)) {
-                fs.unlinkSync(path.join(userDataPath, `gacha-list-${param.uid}.json`))
-                dataMap.delete(param.uid)
-                return `清空 ${param.uid} 成功`
+            let uid = config.current
+            if (existsFile(`gacha-list-${uid}.json`)) {
+                fs.unlinkSync(path.join(userDataPath, `gacha-list-${uid}.json`))
+                dataMap.delete(uid)
+                return `清空 ${uid} 成功`
             }
         }
         return "清空失败，文件不存在"

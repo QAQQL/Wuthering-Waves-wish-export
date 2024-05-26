@@ -19,9 +19,10 @@
         <p class="text-gray-400 text-xs m-1.5">{{ text.logTypeHint }}</p>
       </el-form-item>
       <el-form-item :label="text.CleanDb">
-        <el-button :loading="data.loadingOfCleanDb" class="focus:outline-none" plain type="primary"
-                   @click="CleanDb">{{ text.CleanDbButton }}
-        </el-button>
+        <div class="flex space-x-2">
+          <el-button :loading="data.loadingOfCleanDb" class="focus:outline-none" plain type="primary" @click="CleanDb(false)">{{ text.CleanDbButton }}</el-button>
+          <el-button :loading="data.loadingOfCleanDb" class="focus:outline-none" plain type="success" @click="CleanDb(true)">{{ text.CleanDbAllButton }}</el-button>
+        </div>
       </el-form-item>
       <el-form-item :label="text.UIGFLable">
         <div class="flex space-x-2">
@@ -66,11 +67,12 @@
 </template>
 
 <script setup>
+
 const {ipcRenderer, shell} = require('electron')
 import {computed, onMounted, reactive, ref} from 'vue'
 import {ElMessage} from 'element-plus'
 
-const emit = defineEmits(['close', 'changeLang', 'dataUpdated'])
+const emit = defineEmits(['close', 'changeLang', 'dataUpdated', 'dataClean'])
 
 const props = defineProps({
   i18n: Object
@@ -123,15 +125,15 @@ const disableProxy = async () => {
 const openGithub = () => shell.openExternal(about.value.project_url)
 const openLink = (link) => shell.openExternal(link)
 
-const CleanDb = async () => {
+const CleanDb = async (isAll) => {
   data.loadingOfCleanDb = true
   try {
-    const msg = await ipcRenderer.invoke('CLEAN_LOCAL_DB')
+    const msg = await ipcRenderer.invoke('CLEAN_LOCAL_DB', isAll)
     ElMessage({
       message: msg || text.value.CleanDbSuccessed,
       type: 'success'
     })
-    emit('dataUpdated')
+    emit('dataClean')
     closeSetting()
   } catch (e) {
     ElMessage({
