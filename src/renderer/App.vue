@@ -4,30 +4,35 @@
       <div>
         <el-button type="primary" :icon="state.status === 'init' ? 'milk-tea': 'refresh-right'"
                    class="focus:outline-none" :disabled="!allowClick()" plain @click="fetchData()"
-                   :loading="state.status === 'loading'">
+                   :loading="state.status === 'loading'"
+        >
           {{ state.status === 'init' ? ui.button.load : ui.button.update }}
         </el-button>
         <el-button icon="folder-opened" @click="saveExcel" class="focus:outline-none" :disabled="!gachaData"
-                   type="success" plain>{{ ui.button.excel }}
+                   type="success" plain
+        >{{ ui.button.excel }}
         </el-button>
         <el-tooltip v-if="detail && state.status !== 'loading'" :content="ui.hint.newAccount" placement="bottom">
           <el-button @click="newUser()" plain icon="plus" class="focus:outline-none"></el-button>
         </el-tooltip>
         <el-tooltip v-if="state.status === 'updated'" :content="ui.hint.relaunchHint" placement="bottom">
           <el-button @click="relaunch()" type="success" icon="refresh" class="focus:outline-none"
-                     style="margin-left: 48px">{{ ui.button.directUpdate }}
+                     style="margin-left: 48px"
+          >{{ ui.button.directUpdate }}
           </el-button>
         </el-tooltip>
       </div>
       <div class="flex gap-2">
         <el-select
-            v-if="state.status !== 'loading' && state.dataMap && (state.dataMap.size > 1 || (state.dataMap.size === 1 && state.current === 0))"
-            class="w-44" @change="changeCurrent" v-model="uidSelectText">
+          v-if="state.status !== 'loading' && state.dataMap && (state.dataMap.size > 1 || (state.dataMap.size === 1 && state.current === 0))"
+          class="w-44" @change="changeCurrent" v-model="uidSelectText"
+        >
           <el-option
-              v-for="item of state.dataMap"
-              :key="item[0]"
-              :label="maskUid(item[0])"
-              :value="item[0]">
+            v-for="item of state.dataMap"
+            :key="item[0]"
+            :label="maskUid(item[0])"
+            :value="item[0]"
+          >
           </el-option>
         </el-select>
         <el-dropdown @command="optionCommand">
@@ -51,7 +56,8 @@
     </div>
     <p class="text-gray-400 my-2 text-xs">{{ hint }}
       <el-button @click="(state.showCacheCleanDlg=true)" v-if="state.authkeyTimeout" style="margin-left: 8px;"
-                 size="small" plain round>{{ ui.button.solution }}
+                 size="small" plain round
+      >{{ ui.button.solution }}
       </el-button>
     </p>
     <div v-if="detail" class="gap-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 2xl:grid-cols-4">
@@ -64,16 +70,19 @@
       </div>
     </div>
     <Setting v-show="state.showSetting" :i18n="state.i18n" @changeLang="getI18nData()" @close="showSetting(false)"
-             @dataUpdated="readData(true)"  @dataClean="dataClean()"></Setting>
+             @dataUpdated="readData(true)" @dataClean="dataClean()"
+    ></Setting>
     <el-dialog :title="ui.urlDialog.title" v-model="state.showUrlDlg" width="90%" custom-class="max-w-md">
       <p class="mb-4 text-gray-500">{{ ui.urlDialog.hint }}</p>
       <el-input type="textarea" :autosize="{minRows: 4, maxRows: 6}" :placeholder="ui.urlDialog.placeholder"
-                v-model="state.urlInput" spellcheck="false"></el-input>
+                v-model="state.urlInput" spellcheck="false"
+      ></el-input>
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="state.showUrlDlg = false" class="focus:outline-none">{{ ui.common.cancel }}</el-button>
           <el-button type="primary" @click="state.showUrlDlg = false, fetchData(state.urlInput)"
-                     class="focus:outline-none">{{ ui.common.ok }}</el-button>
+                     class="focus:outline-none"
+          >{{ ui.common.ok }}</el-button>
         </span>
       </template>
     </el-dialog>
@@ -95,15 +104,15 @@
 </template>
 
 <script setup>
-const {ipcRenderer} = require('electron')
-import {reactive, computed, watch, onMounted} from 'vue'
+const { ipcRenderer } = require('electron')
+import { reactive, computed, watch, onMounted } from 'vue'
 import PieChart from './components/PieChart.vue'
 import GachaDetail from './components/GachaDetail.vue'
 import Setting from './components/Setting.vue'
 import gachaDetail from './gachaDetail'
-import {version} from '../../package.json'
+import { version } from '../../package.json'
 import gachaType from '../gachaType.json'
-import {ElMessage} from 'element-plus'
+import { ElMessage } from 'element-plus'
 
 const state = reactive({
   status: 'init',
@@ -145,12 +154,15 @@ const allowClick = () => {
 }
 
 const hint = computed(() => {
+  if (state.current === -1) {
+    state.status = 'failed'
+  }
   const data = state.dataMap.get(state.current)
   if (!state.i18n) {
     return 'Loading...'
   }
-  const {hint} = state.i18n.ui
-  const {colon} = state.i18n.symbol
+  const { hint } = state.i18n.ui
+  const { colon } = state.i18n.symbol
   if (state.status === 'init') {
     return hint.init
   } else if (state.status === 'loaded') {
@@ -165,12 +177,11 @@ const hint = computed(() => {
   return '　'
 })
 
-
 const typeMap = computed(() => {
   const type = gachaType[state.config.lang]
   const result = new Map()
   if (type) {
-    for (let {key, name} of type) {
+    for (let { key, name } of type) {
       result.set(key, name)
     }
   }
@@ -194,7 +205,7 @@ const detail = computed(() => {
   }
 })
 
-const fetchData = async (url) => {
+const fetchData = async(url) => {
   state.status = 'loading'
   const data = await ipcRenderer.invoke('FETCH_DATA', url)
   if (data) {
@@ -206,7 +217,7 @@ const fetchData = async (url) => {
   }
 }
 
-const readData = async (force = false) => {
+const readData = async(force = false) => {
   const data = await ipcRenderer.invoke(force ? 'FORCE_READ_DATA' : 'READ_DATA')
   if (data) {
     state.dataMap = data.dataMap
@@ -222,7 +233,7 @@ const dataClean = () => {
   readData(true)
 }
 
-const getI18nData = async () => {
+const getI18nData = async() => {
   const data = await ipcRenderer.invoke('I18N_DATA')
   if (data) {
     state.i18n = data
@@ -230,15 +241,15 @@ const getI18nData = async () => {
   }
 }
 
-const saveExcel = async () => {
+const saveExcel = async() => {
   await ipcRenderer.invoke('SAVE_EXCEL')
 }
 
-const openCacheFolder = async () => {
+const openCacheFolder = async() => {
   await ipcRenderer.invoke('OPEN_CACHE_FOLDER')
 }
 
-const changeCurrent = async (uid) => {
+const changeCurrent = async(uid) => {
   if (uid === 0) {
     state.status = 'init'
   } else {
@@ -248,11 +259,11 @@ const changeCurrent = async (uid) => {
   await ipcRenderer.invoke('CHANGE_UID', uid)
 }
 
-const newUser = async () => {
+const newUser = async() => {
   await changeCurrent(0)
 }
 
-const relaunch = async () => {
+const relaunch = async() => {
   await ipcRenderer.invoke('RELAUNCH')
 }
 
@@ -283,7 +294,7 @@ const optionCommand = (type) => {
   }
 }
 
-const copyUrl = async () => {
+const copyUrl = async() => {
   const successed = await ipcRenderer.invoke('COPY_URL')
   if (successed) {
     ElMessage.success(ui.value.extra.urlCopied)
@@ -296,11 +307,11 @@ const setTitle = () => {
   document.title = `${state.i18n.ui.win.title} - v${version}`
 }
 
-const updateConfig = async () => {
+const updateConfig = async() => {
   state.config = await ipcRenderer.invoke('GET_CONFIG')
 }
 
-onMounted(async () => {
+onMounted(async() => {
   await readData()
   await getI18nData()
 

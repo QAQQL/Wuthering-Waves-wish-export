@@ -12,10 +12,11 @@ const config = {
   hideNovice: true,
   gistsToken: '',
   gistsId: '',
-  readableJSON: false
+  readableJSON: false,
+  cacheFolder: ''
 }
 
-const getLocalConfig = async () => {
+const getLocalConfig = async() => {
   const localConfig = await readJSON('config.json')
   if (!localConfig) return
   const configTemp = {}
@@ -41,7 +42,7 @@ const setConfig = (key, value) => {
   Reflect.set(config, key, value)
 }
 
-const saveConfig = async () => {
+const saveConfig = async() => {
   let configTemp = config
   if (urlsMap) {
     const urls = [...urlsMap]
@@ -60,7 +61,7 @@ const saveConfig = async () => {
 const getPlainConfig = () => config
 
 const configProxy = new Proxy(config, {
-  get: function (obj, prop) {
+  get: function(obj, prop) {
     if (prop === 'urls') {
       if (!urlsMap) {
         urlsMap = new Map(obj[prop])

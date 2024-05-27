@@ -33,7 +33,7 @@ if (!isFirstInstance) {
 
   app.whenReady().then(createWindow)
 
-  ipcMain.handle('RELAUNCH', async () => {
+  ipcMain.handle('RELAUNCH', async() => {
     app.relaunch()
     app.exit(0)
   })

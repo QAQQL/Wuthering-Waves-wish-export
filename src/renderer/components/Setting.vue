@@ -96,7 +96,7 @@ const settingForm = reactive({
   proxyMode: true,
   autoUpdate: false,
   fetchFullHistory: false,
-  hideNovice: true,
+  hideNovice: false,
   gistsToken: '',
   readableJSON: false
 })
