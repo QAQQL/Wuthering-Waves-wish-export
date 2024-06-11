@@ -2,7 +2,7 @@ const fs = require('fs-extra')
 const path = require('path')
 const { URL } = require('url')
 const { app, ipcMain, shell, clipboard, dialog } = require('electron')
-const { readdir, sleep, request, sendMsg, readJSON, saveJSON, userDataPath, userPath, localIp, langMap, getCacheText, existsFile } = require('./utils')
+const { hash, readdir, sleep, request, sendMsg, readJSON, saveJSON, userDataPath, userPath, localIp, langMap, getCacheText, existsFile } = require('./utils')
 const config = require('./config')
 const getItemTypeNameMap = require('./gachaTypeMap').getItemTypeNameMap
 const i18n = require('./i18n')
@@ -80,6 +80,9 @@ const compareList = (b, a) => {
   return strA === strB
 }
 
+/**
+ * 合并新老数据
+ */
 const mergeList = (a, b) => {
   if (!a || !a.length) return b || []
   if (!b || !b.length) return a
@@ -115,10 +118,15 @@ const mergeData = (local, origin) => {
     const localResult = local.result
     const localUid = local.uid
     const originUid = origin.uid
+    // 数据不是当前账号,直接显示
     if (localUid !== originUid) return origin.result
     const originResult = new Map()
+
+    // 遍历抽卡数据  { '1':[], '2':[] }
     for (let [key, value] of origin.result) {
+      // 和原始数据比较
       const newVal = mergeList(value, localResult.get(key))
+      // 保存合并后的数据
       originResult.set(key, newVal)
     }
     return originResult
@@ -290,6 +298,9 @@ const getUrl = async() => {
   return await readLog()
 }
 
+/**
+ * 更新数据
+ */
 const fetchData = async(urlOverride) => {
   try {
     const text = i18n.log
@@ -313,17 +324,19 @@ const fetchData = async(urlOverride) => {
     for (const type of gachaType) {
       const list = await getGachaLogs(type, searchParams)
       const logs = list.map((item) => {
-        return [item.time, item.name, item.resourceType, parseInt(item.qualityLevel), parseInt(item.cardPoolType), item.resourceId]
+        // resourceId是资源id,鸣潮没有记录id,使用 hash(name+cardPoolType+time)
+        // todo 等待鸣潮是否有id出现,这个方案由于抽卡时间没精确到毫秒,可能会有重复
+        return [item.time, item.name, item.resourceType, parseInt(item.qualityLevel), parseInt(searchParams.cardPoolType), hash(item.name + item.cardPoolType + item.time)]
       })
       logs.reverse()
       typeMap.set(type[0], type[1])
       result.set(type[0], logs)
     }
     const data = { result, time: Date.now(), typeMap, uid: originUid, lang }
-    const localData = dataMap.get(originUid)
-    // todo 合并有问题
-    const mergedResult = mergeData(localData, data)
-    data.result = mergedResult
+    // 由于鸣潮没有记录id,现在的方案可能会重复,暂时放弃数据合并
+    // const localData = dataMap.get(originUid)
+    // const mergedResult = mergeData(localData, data)
+    // data.result = mergedResult
     dataMap.set(originUid, data)
     await changeCurrent(originUid)
     await saveData(data, url)

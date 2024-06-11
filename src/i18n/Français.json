@@ -81,8 +81,21 @@
   "excel.header.remark": "Commentaire",
   "excel.wish2": "Vœux 2",
   "excel.customFont": "Arial",
-  "excel.filePrefix": "GenshinImpact_historique_voeux",
+  "excel.filePrefix": "Wuthering_Waves_historique_voeux",
   "excel.fileType": "Classeur Excel",
   "ui.extra.cacheClean": "1. Confirmez si l'historique des vœux dans le jeu a été ouvert et si l'erreur \"Authentification utilisateur expirée\" apparaît toujours, essayez les étapes suivantes \n2. Fermez la fenêtre de jeu de Genshin Impact \n3. Cliquez sur le bouton \"Ouvrir le dossier de cache Web\" ci-dessus pour ouvrir le dossier \"Cache\" \n4. Supprimez le dossier \"Cache_Data\" \n5. Démarrez le jeu Genshin Impact et ouvrez la page d'historique des vœux dans le jeu \n6. Fermez cette boîte de dialogue et cliquez sur le bouton \"Mettre à jour les données\"",
-  "ui.extra.findCacheFolder": "Si le bouton \"Ouvrir le dossier de cache\" ne répond pas, vous pouvez rechercher manuellement le dossier cache web du jeu. Le répertoire est \"Chemin d'installation de votre jeu/Genshin Impact Game/GenshinImpact_Data/webCaches/Cache/\""
+  "ui.extra.findCacheFolder": "Si le bouton \"Ouvrir le dossier de cache\" ne répond pas, vous pouvez rechercher manuellement le dossier cache web du jeu. Le répertoire est \"Chemin d'installation de votre jeu/Wuthering Waves Game/Client/Saved/Logs\"",
+  "ui.button.copyUrl": "Copier l'URL",
+  "ui.setting.UIGFHint": "Cette fonction est utilisée pour importer / exporter des données (il faudra un certain temps pour exporter pour la première fois). Les outils pris en charge se réfèrent à ce lien:",
+  "ui.setting.UIGFImportButton": "Données d'importation",
+  "ui.setting.UIGFImportSuccessed": "Les données ont été importées",
+  "ui.setting.UIGFLink": "Norme unifiée d'enregistrement des cartes de tirage interchangeables",
+  "ui.setting.UIGFLable": "Importation / exportation",
+  "ui.setting.UIGFButton": "Données d'exportation",
+  "ui.setting.UIGFReadable": "Lisible",
+  "ui.setting.CleanDb": "Effacer les données locales",
+  "ui.setting.CleanDbButton": "Effacer l'utilisateur actuel",
+  "ui.setting.CleanDbAllButton": "Effacer tous les utilisateurs",
+  "ui.setting.CleanDbSuccessed": "Nettoyage réussi",
+  "ui.extra.urlCopied": "URL a été répliquée"
 }
