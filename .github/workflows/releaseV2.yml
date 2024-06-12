@@ -6,9 +6,9 @@ on:
 name: Upload Release Asset
 
 permissions:
-  contents: 'read'
-  id-token: 'write'
-  issues: 'write' #__This fixed the HttpError: Resource not accessible by integration
+  contents: write
+  id-token: write
+  issues: write
 
 jobs:
   build:
