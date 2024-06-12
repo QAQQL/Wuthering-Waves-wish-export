@@ -10,7 +10,7 @@
 
 ## 使用说明
 
-1. 下载工具后解压 - 下载地址: [Github](https://github.com/QAQQL/Wuthering-Waves-wish-export/releases/latest/download/Wuthering-Waves-Wish-Export.zip) / [蓝奏云](https://) 密码：
+1. 下载工具后解压 - 下载地址: [Github](https://github.com/QAQQL/Wuthering-Waves-wish-export/releases/latest/download/Wuthering-Waves-Wish-Export.zip) / [123盘](https://www.123pan.com/s/3e39-DyVQh.html)
 2. 打开游戏的祈愿历史记录
 
    ![祈愿历史记录](/docs/wish-history.png)
