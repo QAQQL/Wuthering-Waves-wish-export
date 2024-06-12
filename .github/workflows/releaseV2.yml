@@ -6,9 +6,10 @@ on:
 name: Upload Release Asset
 
 permissions:
+  pull-requests: write
   contents: write
   id-token: write
-  issues: write
+  issues: write #__This fixed the HttpError: Resource not accessible by integration
 
 jobs:
   build:
