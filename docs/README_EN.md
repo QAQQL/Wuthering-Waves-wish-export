@@ -1,10 +1,10 @@
 # Genshin Impact Wish History Exporter
 
-[中文](https://github.com/biuuu/genshin-wish-export/blob/main/README.md) | English
+[中文](https://github.com/QAQQL/Wuthering-Waves-wish-export/blob/main/README.md) | English
 
 A tool made from Electron that runs on the Windows 64 bit operating system.
 
-Read the game log or proxy to get the authKey needed to access the game wish history API, and then use the authKey to read the game wish history.
+Read the game log or proxy to get the URL needed to access the game wish history API, and then use the URL to read the game wish history.
 
 The tool will save the data in the `userData` folder in the current directory and will merge with the local data when a new wish history is obtained.
 
@@ -14,21 +14,12 @@ Modify the JSON file in the `src/i18n/` directory to translate into the appropri
 
 If you feel that the existing translation is inappropriate, you can send a pull request to modify it at any time.
 
-## Recover data from Excel
-https://genshin-gacha-export.danmu9.com
-
-You can export JSON data from an Excel file through this web page, or you can select a End Date on the web page to remove duplicate data.
-
-Copy the downloaded JSON file to the userData folder of the tool to recover the data.
-
-When using web pages, be sure to fill in the correct UID and select the correct language used in the Excel file.
-
 ## Usage
 
-1. Unzip after downloading the tool - [Download](https://github.com/biuuu/genshin-wish-export/releases/latest/download/Genshin-Wish-Export.zip)
+1. Unzip after downloading the tool - [Download](https://github.com/QAQQL/Wuthering-Waves-wish-export/releases/latest/download/Wuthering-Waves-Wish-Export.zip)
 2. Open the wish history of the game
 
-    ![wish history](/docs/wish-history-en.png)
+    ![wish history](/docs/wish-history.png)
 
 3. Click the tool's "Load data" button
 
@@ -44,11 +35,14 @@ When using web pages, be sure to fill in the correct UID and select the correct 
 
 If you need to export the data of multiple accounts, you can click the plus button next to it.
 
-Then switch to the new account of the game, open the wish history, and click the "load data" button in the tool.
+Then 'Alt+F4' big exit game, re-open the switch of the new account, and then open the wish history, the tool and click the "load data" button.
 
 ## Devlopment
 
 ```
+# Switching node 18
+nvm use 18.20.3
+
 # install node modules
 yarn install
 
@@ -61,5 +55,14 @@ yarn build
 
 ## License
 
-[MIT](https://github.com/biuuu/genshin-wish-export/blob/main/LICENSE)
+[MIT](https://github.com/QAQQL/Wuthering-Waves-wish-export/blob/main/LICENSE)
 
+
+
+# This project code comes from https://github.com/biuuu/genshin-wish-export
+## If there is infringement, please contact delete
+
+
+# Special thanks
+- [biuuu - authorship](https://github.com/biuuu)
+- [Arikatsu - Wuthering-Waves-Data-Source](https://github.com/Arikatsu/WutheringWaves_Data)

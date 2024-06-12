@@ -174,11 +174,12 @@ const readLog = async() => {
     throw new Error(text.file.notFound)
   }
   const logText = await fs.readFile(`${config["cacheFolder"]}/${logPath}`, 'utf8')
+  //从后往前找,找到第一个url
   const urlMch = logText.match(/https.+?aki\/gacha\/index.html#\/record\?.+?record_id=.+?resources_id=\w+/g)
   if (!urlMch) {
     throw new Error(text.url.notFound)
   }
-  return urlMch[0]
+  return urlMch[urlMch.length - 1]
 }
 
 /**
@@ -262,13 +263,15 @@ const proxyServer = (port) => {
   return new Promise((rev) => {
     mitmproxy.createProxy({
       sslConnectInterceptor: (req, cltSocket, head) => {
-        if (/webstatic([^\.]{2,10})?\.(mihoyo|hoyoverse)\.com/.test(req.url)) {
+        if (req.url.includes("aki-game.com")) {
           return true
         }
       }, requestInterceptor: (rOptions, req, res, ssl, next) => {
         next()
-        if (/webstatic([^\.]{2,10})?\.(mihoyo|hoyoverse)\.com/.test(rOptions.hostname)) {
-          if (/authkey=[^&]+/.test(rOptions.path)) {
+        console.error(rOptions.protocol, rOptions.hostname, rOptions.path)
+        //https://aki-gm-resources.aki-game.com/aki/gacha/index.html#/record
+        if (rOptions.hostname.endsWith("aki-game.com")) {
+          if (/record_id=[^&]+/.test(rOptions.path)) {
             rev(`${rOptions.protocol}//${rOptions.hostname}${rOptions.path}`)
           }
         }

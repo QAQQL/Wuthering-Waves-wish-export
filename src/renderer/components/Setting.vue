@@ -3,7 +3,8 @@
     <div class="flex content-center items-center mb-4 justify-between">
       <h3 class="text-lg">{{ text.title }}</h3>
       <el-button icon="close" @click="closeSetting" plain circle type="default"
-                 class="w-8 h-8 relative -right-4 -top-2 shadow-md focus:shadow-none focus:outline-none"></el-button>
+                 class="w-8 h-8 relative -right-4 -top-2 shadow-md focus:shadow-none focus:outline-none"
+      ></el-button>
     </div>
     <el-form :model="settingForm" label-width="120px">
       <el-form-item :label="text.language">
@@ -27,34 +28,40 @@
       <el-form-item :label="text.UIGFLable">
         <div class="flex space-x-2">
           <el-button :loading="data.loadingOfUIGFJSON" class="focus:outline-none" plain type="primary"
-                     @click="importUIGFJSON">{{ text.UIGFImportButton }}
+                     @click="importUIGFJSON"
+          >{{ text.UIGFImportButton }}
           </el-button>
           <el-button :loading="data.loadingOfUIGFJSON" class="focus:outline-none" plain type="success"
-                     @click="exportUIGFJSON">{{ text.UIGFButton }}
+                     @click="exportUIGFJSON"
+          >{{ text.UIGFButton }}
           </el-button>
           <el-checkbox v-model="settingForm.readableJSON" @change="saveSetting">{{ text.UIGFReadable }}</el-checkbox>
         </div>
         <p class="text-gray-400 text-xs m-1.5 leading-normal">{{ text.UIGFHint }}
           <a class="cursor-pointer text-blue-400"
-             @click="openLink(`https://uigf.org/${settingForm.lang.startsWith('zh-') ? 'zh/': 'en/'}`)">{{ text.UIGFLink }}</a>
+             @click="openLink(`https://uigf.org/${settingForm.lang.startsWith('zh-') ? 'zh/': 'en/'}`)"
+          >{{ text.UIGFLink }}</a>
         </p>
       </el-form-item>
       <el-form-item :label="text.autoUpdate">
         <el-switch
-            @change="saveSetting"
-            v-model="settingForm.autoUpdate">
+          @change="saveSetting"
+          v-model="settingForm.autoUpdate"
+        >
         </el-switch>
       </el-form-item>
       <el-form-item :label="text.hideNovice">
         <el-switch
-            @change="saveSetting"
-            v-model="settingForm.hideNovice">
+          @change="saveSetting"
+          v-model="settingForm.hideNovice"
+        >
         </el-switch>
       </el-form-item>
-      <el-form-item :label="text.fetchFullHistory">
+      <el-form-item :label="text.fetchFullHistory" v-if="false">
         <el-switch
-            @change="saveSetting"
-            v-model="settingForm.fetchFullHistory">
+          @change="saveSetting"
+          v-model="settingForm.fetchFullHistory"
+        >
         </el-switch>
         <p class="text-gray-400 text-xs m-1.5">{{ text.fetchFullHistoryHint }}</p>
       </el-form-item>
@@ -68,9 +75,9 @@
 
 <script setup>
 
-const {ipcRenderer, shell} = require('electron')
-import {computed, onMounted, reactive, ref} from 'vue'
-import {ElMessage} from 'element-plus'
+const { ipcRenderer, shell } = require('electron')
+import { computed, onMounted, reactive, ref } from 'vue'
+import { ElMessage } from 'element-plus'
 
 const emit = defineEmits(['close', 'changeLang', 'dataUpdated', 'dataClean'])
 
@@ -86,14 +93,14 @@ const data = reactive({
 
 const logTypeMap = {
   0: 'auto',
-  1: 'cnServer',
+  1: 'cnServer'
 }
 
-
+// mitmproxy抓不到鸣潮的包,舍弃
 const settingForm = reactive({
+  proxyMode: false,
   lang: 'zh-cn',
   logType: 1,
-  proxyMode: true,
   autoUpdate: false,
   fetchFullHistory: false,
   hideNovice: false,
@@ -104,28 +111,28 @@ const settingForm = reactive({
 const text = computed(() => props.i18n.ui.setting)
 const about = computed(() => props.i18n.ui.about)
 
-const saveSetting = async () => {
+const saveSetting = async() => {
   const keys = ['lang', 'logType', 'proxyMode', 'autoUpdate', 'fetchFullHistory', 'hideNovice', 'gistsToken', 'readableJSON']
   for (let key of keys) {
     await ipcRenderer.invoke('SAVE_CONFIG', [key, settingForm[key]])
   }
 }
 
-const saveLang = async () => {
+const saveLang = async() => {
   await saveSetting()
   emit('changeLang')
 }
 
 const closeSetting = () => emit('close')
 
-const disableProxy = async () => {
+const disableProxy = async() => {
   await ipcRenderer.invoke('DISABLE_PROXY')
 }
 
 const openGithub = () => shell.openExternal(about.value.project_url)
 const openLink = (link) => shell.openExternal(link)
 
-const CleanDb = async (isAll) => {
+const CleanDb = async(isAll) => {
   data.loadingOfCleanDb = true
   try {
     const msg = await ipcRenderer.invoke('CLEAN_LOCAL_DB', isAll)
@@ -145,7 +152,7 @@ const CleanDb = async (isAll) => {
   }
 }
 
-const exportUIGFJSON = async () => {
+const exportUIGFJSON = async() => {
   data.loadingOfUIGFJSON = true
   try {
     await ipcRenderer.invoke('EXPORT_UIGF_JSON')
@@ -159,7 +166,7 @@ const exportUIGFJSON = async () => {
   }
 }
 
-const importUIGFJSON = async () => {
+const importUIGFJSON = async() => {
   data.loadingOfUIGFJSON = true
   try {
     const result = await ipcRenderer.invoke('IMPORT_UIGF_JSON')
@@ -189,30 +196,30 @@ const configGistsToken = () => {
   openLink('https://github.com/settings/personal-access-tokens/new')
 }
 
-const saveGistsToken = async () => {
+const saveGistsToken = async() => {
   gistsConfigDisabled.value = true
   await saveSetting()
 }
 
 const uploadGistsLoading = ref(false)
-const uploadGists = async () => {
+const uploadGists = async() => {
   uploadGistsLoading.value = true
   const result = await ipcRenderer.invoke('EXPORT_UIGF_JSON_GISTS')
   if (result === 'successed') {
     ElMessage({
       message: '上传数据成功',
-      type: 'success',
+      type: 'success'
     })
   } else {
     ElMessage({
       message: result,
-      type: 'error',
+      type: 'error'
     })
   }
   uploadGistsLoading.value = false
 }
 
-onMounted(async () => {
+onMounted(async() => {
   data.langMap = await ipcRenderer.invoke('LANG_MAP')
   const config = await ipcRenderer.invoke('GET_CONFIG')
   Object.assign(settingForm, config)
