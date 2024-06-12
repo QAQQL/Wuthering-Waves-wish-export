@@ -1,6 +1,6 @@
 {
   "name": "wuthering-waves-export",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "main": "./dist/electron/main/main.js",
   "author": "QAQQL <https://github.com/QAQQL>",
   "homepage": "https://github.com/QAQQL/Wuthering-Waves-wish-export",
