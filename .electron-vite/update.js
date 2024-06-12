@@ -35,7 +35,7 @@ const start = async () => {
   await fs.outputJSON(path.join(outputPath, 'manifest.json'), {
     active: true,
     version,
-    from: '0.1.5',
+    from: '1.0.0',
     name: `${hashName}.zip`,
     hash: sha256
   })
@@ -45,7 +45,7 @@ const start = async () => {
 const copyAppZip = () => {
   try {
     const dir = path.resolve('./build')
-    const filePath = path.resolve(dir, `Wuthering Waves Wish Export-${version}-win.zip`)
+    const filePath = path.resolve(dir, `Wuthering Waves Export-${version}-win.zip`)
     fs.copySync(filePath, path.join(dir, 'app.zip'))
   } catch (e) {}
 }
