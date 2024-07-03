@@ -1,6 +1,6 @@
 {
   "name": "wuthering-waves-export",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "main": "./dist/electron/main/main.js",
   "author": "QAQQL <https://github.com/QAQQL>",
   "homepage": "https://github.com/QAQQL/Wuthering-Waves-wish-export",
@@ -19,7 +19,8 @@
     "start": "electron ./src/main/main.js",
     "build-update": "node .electron-vite/update.js",
     "dep:upgrade": "yarn upgrade-interactive --latest",
-    "postinstall": "electron-builder install-app-deps"
+    "postinstall": "electron-builder install-app-deps",
+    "git:action-build": "git tag v1.0.3 && git push origin v1.0.3"
   },
   "build": {
     "nsis": {
