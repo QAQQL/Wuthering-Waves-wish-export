@@ -28,5 +28,35 @@
       "key": "1",
       "name": "角色活动唤取"
     }
-  ]
+  ],
+    "en-us": [
+        {
+        "key": "7",
+        "name": "Convene Giveback Event"
+        },
+        {
+        "key": "6",
+        "name": "Beginner Selector"
+        },
+        {
+        "key": "5",
+        "name": "Beginner Convene"
+        },
+        {
+        "key": "4",
+        "name": "Permanent Weapon"
+        },
+        {
+        "key": "3",
+        "name": "Permanent Resonator"
+        },
+        {
+        "key": "2",
+        "name": "Featured Weapon"
+        },
+        {
+        "key": "1",
+        "name": "Featured Resonator"
+        }
+    ]
 }
